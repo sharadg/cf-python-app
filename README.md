@@ -11,7 +11,6 @@ This repo contains 2 different processes.
 
 ## Runtime Support
 - ### For running locally (natively on MacOS)
-```
 1. Start RabbitMQ Server
 ```
 docker run -p 5672:5672 -p 4369:4369 -p 15672:15672 -p 25672:25672 -d bitnami/rabbitmq
