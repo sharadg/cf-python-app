@@ -1,0 +1,8 @@
+__pycache__/
+*~
+**/*.mat
+.vscode/
+.idea/
+**/.DS_Store
+bare-env/
+
