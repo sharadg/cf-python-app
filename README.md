@@ -258,7 +258,7 @@ applications:
       PIP_NO_WARN_SCRIPT_LOCATION: 0
 ```
 
-5. The `web` process runs our REST API and `worker` process runs the Fibonacci Server. In case, if when we `cf push` the app and the `worker` process doesn't run then, we need to scale it's process instance to 1 or more.
+5. *OPTIONAL* - The `web` process runs our REST API and `worker` process runs the Fibonacci Server. In case, if when we `cf push` the app and the `worker` process doesn't run then, we need to scale it's process instance to 1 or more.
 ```
 cf scale cf-python-app --process worker -i 1                                                                                                                                                                                                      ✹ ✭
 
@@ -289,4 +289,33 @@ instances:      1/1
 memory usage:   128M
      state     since                  cpu    memory          disk           details
 #0   running   2020-07-03T18:17:36Z   0.4%   16.6M of 128M   208.2M of 1G
+```
+
+6. Test the REST API
+```
+# Substitute the application url below with the url where you deployed your app and invoke /fib/<number> endpoint
+http -v https://cf-python-app-palm-wallaby-yh.cfapps.io/fib/42                                                                                                                                                                                      ✭
+GET /fib/42 HTTP/1.1
+Accept: */*
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Host: cf-python-app-palm-wallaby-yh.cfapps.io
+User-Agent: HTTPie/2.2.0
+
+
+
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 10
+Content-Type: application/json
+Date: Fri, 03 Jul 2020 18:24:24 GMT
+Server: gunicorn/20.0.4
+X-Vcap-Request-Id: 1b478d65-bed3-47fe-480e-ef55dafc087d
+
+267914296
+```
+
+7. In case you make any changes to the Python code and you end up installing more python modules, then you need to update the `requirements.txt` file
+```
+pip freeze > requirements.txt
 ```
