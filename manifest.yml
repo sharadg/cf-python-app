@@ -1,11 +1,16 @@
 ---
 applications:
   - name: cf-python-app
-    instances: 1
-    memory: 128M
     buildpacks:
       - python_buildpack
     random-route: true
+    processes:
+      - type: web
+        memory: 128M
+        instances: 1
+      - type: worker
+        memory: 128M
+        instances: 1
     env:
       PIP_DISABLE_PIP_VERSION_CHECK: 1
       PIP_NO_WARN_SCRIPT_LOCATION: 0

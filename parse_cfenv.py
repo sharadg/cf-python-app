@@ -16,7 +16,7 @@ if os.getenv("profile", "cloud") == "local":
     )
 else:
     cfenv = AppEnv()
-    rabbit_env = cfenv.get_service(label="p.rabbitmq").get_url("uri")
+    rabbit_env = cfenv.get_service(name="rabbitmq-service").get_url("uri")
     rabbit_env = rabbit_env + "?heartbeat=30"
 
 if __name__ == "main":
