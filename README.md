@@ -83,7 +83,7 @@ Server: Werkzeug/1.0.1 Python/3.6.10
 ```
 
 ### For deployment to Cloud Foundry (using [PWS](https://run.pivotal.io) as example here!)
-__ Note: this example assumes you are using [v7 of cf cli](https://github.com/cloudfoundry/cli/blob/master/README.md#downloading-the-latest-v7-cf-cli) __
+__Note: this example assumes you are using [v7 of cf cli](https://github.com/cloudfoundry/cli/blob/master/README.md#downloading-the-latest-v7-cf-cli)__
 
 1. Target your cf api, org & space
 ```
@@ -321,7 +321,7 @@ pip freeze > requirements.txt
 ```
 
 ### For deployment to Kubernetes (using [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) as example here!)
-__ Note: I used minikube version: v1.11.0 and kubernetes version 1.18.3 for testing  __
+__Note: I used minikube version: v1.11.0 and kubernetes version 1.18.3 for testing__
 
 1. Create a docker container from the Dockerfile as part of this repo
 ```
