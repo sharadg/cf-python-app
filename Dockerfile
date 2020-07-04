@@ -3,7 +3,7 @@ LABEL maintainer="sharadgu@vmware.com"
 
 WORKDIR /usr/src/app
 
-COPY ["app.py", "parse_cfenv.py", "requirements.txt", "rpc_client.py", "rpc_server.py", "Procfile", "./"]
+COPY ["app.py", "parse_cfenv.py", "requirements.txt", "rpc_client.py", "rpc_server.py", "./"]
 COPY ["./static/", "./static/"]
 COPY ["./templates/", "./templates/"]
 

@@ -10,7 +10,7 @@ This repo contains 2 different processes.
  - Cloud Foundry target to deploy this Python application to (you can sign up for a free account at https://run.pivotal.io)
 
 ## Runtime Support
-- ### For running locally (on MacOS or Linux)
+### For running locally (on MacOS or Linux)
 
 1. Start RabbitMQ Server
 ```
@@ -40,7 +40,7 @@ pip install -r requirements.txt
 
 6. Set ENV `profile` to `local` (to point to the RabbitMQ server running in the docker container)
 ```
-export profile=local
+export PROFILE=LOCAL
 ```
 
 7. Start main Flask REST API server
@@ -82,8 +82,8 @@ Server: Werkzeug/1.0.1 Python/3.6.10
 28657
 ```
 
-- ### For deployment to Cloud Foundry (using [PWS](https://run.pivotal.io) as example here!)
-**Note: this example assumes you are using [v7 of cf cli](https://github.com/cloudfoundry/cli/blob/master/README.md#downloading-the-latest-v7-cf-cli) **
+### For deployment to Cloud Foundry (using [PWS](https://run.pivotal.io) as example here!)
+** Note: this example assumes you are using [v7 of cf cli](https://github.com/cloudfoundry/cli/blob/master/README.md#downloading-the-latest-v7-cf-cli) **
 
 1. Target your cf api, org & space
 ```
@@ -319,3 +319,43 @@ X-Vcap-Request-Id: 1b478d65-bed3-47fe-480e-ef55dafc087d
 ```
 pip freeze > requirements.txt
 ```
+
+### For deployment to Kubernetes (using [minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) as example here!)
+** Note: I used minikube version: v1.11.0 and kubernetes version 1.18.3 for testing  **
+
+1. Create a docker container from the Dockerfile as part of this repo
+```
+docker build -t cf-python-app:latest -f Dockerfile .
+```
+
+2. Tag and upload the docker container to a registry of your choice (I am uploading to dockerhub as example)
+```
+docker tag cf-python-app:latest shagupta/cf-python-app:latest
+docker push shagupta/cf-python-app:latest
+```
+
+3. Start a minikube cluster on your local workstation
+```
+minikube start --container-runtime=containerd --driver=hyperkit
+```
+
+4. Deploy RabbitMQ using Helm chart and apply the kubernetes manifests located under [kubernetes-manifests](./kubernetes-manifests) folder
+```
+# Add Bitnami repo to helm charts
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install rabbitmq --set auth.username=guest,auth.password=guest bitnami/rabbitmq
+
+# apply the manifests for creating configmap, run a Fibonacci RPC server and the REST API web app
+kubectl apply -f kubernetes-manifests/01-cf-python-configmap.yaml
+kubectl apply -f kubernetes-manifests/02-cf-python-rpc-server.yaml
+kubectl apply -f kubernetes-manifests/03-cf-python-app.yaml
+```
+
+5. Create a service endpoint for your REST API and test it from your local machine
+```
+kubectl expose deployment cf-python-web-deployment --type=LoadBalancer --name=cf-python-web-lb
+
+n=0; while [[ n -lt 20 ]]; do echo "Requesting ... $n"; http $(minikube service cf-python-web-lb --url=true)/fib/$n; n=$((n+1)); sleep 0.01; done
+```
+

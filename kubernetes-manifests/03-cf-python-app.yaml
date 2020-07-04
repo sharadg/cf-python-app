@@ -24,27 +24,27 @@ spec:
         ports:
         - containerPort: 8080
         env:
-        - name: RABBITMQ.USERNAME
+        - name: RABBITMQ_USERNAME
           valueFrom:
             configMapKeyRef:
               name: rabbit-env
               key: username
-        - name: RABBITMQ.USERNAME
+        - name: RABBITMQ_PASSWORD
           valueFrom:
             configMapKeyRef:
               name: rabbit-env
               key: password
-        - name: RABBITMQ.SERVER
+        - name: RABBITMQ_SERVER
           valueFrom:
             configMapKeyRef:
               name: rabbit-env
               key: server
-        - name: RABBITMQ.PORT
+        - name: RABBITMQ_PORT
           valueFrom:
             configMapKeyRef:
               name: rabbit-env
               key: port
-        - name: RABBITMQ.VHOST
+        - name: RABBITMQ_VHOST
           valueFrom:
             configMapKeyRef:
               name: rabbit-env
