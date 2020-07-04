@@ -5,14 +5,14 @@ from cfenv import AppEnv
 
 rabbit_env = ""
 
-if os.getenv("profile", "cloud") == "local":
+if os.getenv("PROFILE", "CLOUD") == "LOCAL":
     # Running in a local or dev environment
     rabbit_env = "amqp://{}:{}@{}:{}/{}?heartbeat=30".format(
-        os.getenv("rabbitmq.username", "user"),
-        os.getenv("rabbitmq.password", "bitnami"),
-        os.getenv("rabbitmq.server", "localhost"),
-        os.getenv("rabbitmq.port", "5672"),
-        urllib.parse.quote_plus(os.getenv("rabbitmq.vhost", "/")),
+        os.getenv("RABBITMQ_USERNAME", "user"),
+        os.getenv("RABBITMQ_PASSWORD", "bitnami"),
+        os.getenv("RABBITMQ_SERVER", "localhost"),
+        os.getenv("RABBITMQ_PORT", "5672"),
+        urllib.parse.quote_plus(os.getenv("RABBITMQ_VHOST", "/")),
     )
 else:
     cfenv = AppEnv()

@@ -1,0 +1,11 @@
+apiVersion: v1
+metadata:
+  name: rabbit-env
+    kind: ConfigMap
+data:
+    username: guest
+    password: guest
+    server: rabbitmq.default.svc.cluster.local
+    port: 5672
+    vhost: /
+    profile: local

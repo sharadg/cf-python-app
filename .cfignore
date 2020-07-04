@@ -1,3 +1,5 @@
 __pycache__
 bare-env
+kubernetes-manifests
 *~
+Dockerfile

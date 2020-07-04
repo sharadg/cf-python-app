@@ -142,7 +142,7 @@ cf bind-service cf-python-app rabbitmq-service
 3. Start the `cf-python-app`
 ```
 cf start cf-python-app
-                                                                                                                                                                                                                 ⏎ ✹ ✭
+
 Starting app cf-python-app in org mordor / space development as shgupta@pivotal.io...
 
 Staging app and tracing logs...
@@ -260,7 +260,7 @@ applications:
 
 5. *OPTIONAL* - The `web` process runs our REST API and `worker` process runs the Fibonacci Server. In case, if when we `cf push` the app and the `worker` process doesn't run then, we need to scale it's process instance to 1 or more.
 ```
-cf scale cf-python-app --process worker -i 1                                                                                                                                                                                                      ✹ ✭
+cf scale cf-python-app --process worker -i 1
 
 Scaling app cf-python-app in org mordor / space development as shgupta@pivotal.io...
 
@@ -294,7 +294,7 @@ memory usage:   128M
 6. Test the REST API
 ```
 # Substitute the application url below with the url where you deployed your app and invoke /fib/<number> endpoint
-http -v https://cf-python-app-palm-wallaby-yh.cfapps.io/fib/42                                                                                                                                                                                      ✭
+http -v https://cf-python-app-palm-wallaby-yh.cfapps.io/fib/42
 GET /fib/42 HTTP/1.1
 Accept: */*
 Accept-Encoding: gzip, deflate

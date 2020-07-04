@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cf-python-web-deployment
+  labels:
+    app: cf-python-web
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cf-python-web
+  template:
+    metadata:
+      labels:
+        app: cf-python-web
+    spec:
+      containers:
+      - name: cf-python-web-server
+        image: shagupta/cf-python-app:latest
+        tty: true
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: RABBITMQ.USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: username
+        - name: RABBITMQ.USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: password
+        - name: RABBITMQ.SERVER
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: server
+        - name: RABBITMQ.PORT
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: port
+        - name: RABBITMQ.VHOST
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: vhost
+        - name: PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: rabbit-env
+              key: profile
+
