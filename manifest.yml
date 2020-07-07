@@ -4,15 +4,15 @@ applications:
     buildpacks:
       - python_buildpack
     random-route: true
+    services:
+      - rabbitmq-service
     processes:
       - type: web
         memory: 128M
         instances: 1
-#        command: gunicorn -w 2 -t 600 app:app
       - type: worker
         memory: 128M
         instances: 1
-#        command: python3 rpc_server.py
     env:
       PIP_DISABLE_PIP_VERSION_CHECK: 1
       PIP_NO_WARN_SCRIPT_LOCATION: 0

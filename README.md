@@ -90,42 +90,7 @@ __Note: this example assumes you are using [v7 of cf cli](https://github.com/clo
 cf login -a https://api.run.pivotal.io --sso
 ```
 
-2. Push `cf-python-app` but don't start it yet
-```
-cf push --no-start
-
-Pushing app cf-python-app to org mordor / space development as shgupta@pivotal.io...
-Applying manifest file /Users/sgupta/development/python/cf-python-app/manifest.yml...
-Manifest applied
-Packaging files to upload...
-Uploading files...
- 44.30 KiB / 44.30 KiB [==========================================================================================================================================================================================================================] 100.00% 1s
-
-Waiting for API to complete processing files...
-
-name:              cf-python-app
-requested state:   stopped
-routes:            cf-python-app-palm-wallaby-yh.cfapps.io
-last uploaded:
-stack:
-buildpacks:
-
-type:           web
-sidecars:
-instances:      0/1
-memory usage:   128M
-     state   since                  cpu    memory   disk     details
-#0   down    2020-07-03T18:15:48Z   0.0%   0 of 0   0 of 0
-
-type:           worker
-sidecars:
-instances:      0/1
-memory usage:   128M
-     state   since                  cpu    memory   disk     details
-#0   down    2020-07-03T18:15:48Z   0.0%   0 of 0   0 of 0
-```
-
-2. Search marketplace for a RabbitMQ service broker and create a new service instance, and bind it to the python app
+2. Search marketplace for a RabbitMQ service broker and create a new service instance, and specify the service instance name in the manifest.yml file
 ```
 # If you are using PWS, then it offers RabbitMQ service by CloudAMQP
 cf marketplace -e cloudamqp
@@ -135,21 +100,28 @@ cf marketplace -e rabbitmq
 # Crete a new service instance
 cf create-service cloudamqp lemur rabbitmq-service
 
-# Bind this instance to previously pushed (but not yet started) python app
-cf bind-service cf-python-app rabbitmq-service
+# You can skip this step if service binding is part of your manifest.yml file
+# OR Bind this instance to previously pushed (but not yet started) python app
+# cf bind-service cf-python-app rabbitmq-service
 ```
 
-3. Start the `cf-python-app`
+3. Push the `cf-python-app`
 ```
-cf start cf-python-app
+cf push                                                                                                           ✹ ✭
+Pushing app cf-python-app to org mordor / space development as shgupta@pivotal.io...
+Applying manifest file /Users/sgupta/development/python/cf-python-app/manifest.yml...
+Manifest applied
+Packaging files to upload...
+Uploading files...
+ 46.04 KiB / 46.04 KiB [==========================================================================================] 100.00% 1s
 
-Starting app cf-python-app in org mordor / space development as shgupta@pivotal.io...
+Waiting for API to complete processing files...
 
 Staging app and tracing logs...
    Downloading python_buildpack...
    Downloaded python_buildpack
-   Cell 65a71ce1-e630-4765-8f60-adebfa730268 creating container for instance 784e7e5b-2771-48e1-a150-2c9cddfd2c46
-   Cell 65a71ce1-e630-4765-8f60-adebfa730268 successfully created container for instance 784e7e5b-2771-48e1-a150-2c9cddfd2c46
+   Cell 33875e88-eaee-4f36-8078-33971b28ec28 creating container for instance 737ff658-09d6-4645-bacd-583d08ce586c
+   Cell 33875e88-eaee-4f36-8078-33971b28ec28 successfully created container for instance 737ff658-09d6-4645-bacd-583d08ce586c
    Downloading app package...
    Downloaded app package (1.1M)
    -----> Python Buildpack version 1.7.15
@@ -182,25 +154,21 @@ Staging app and tracing logs...
           Collecting six==1.15.0 (from -r /tmp/app/requirements.txt (line 11))
             Downloading https://files.pythonhosted.org/packages/ee/ff/48bde5c0f013094d729fe4b0316ba2a24774b3ff1c52d924a8a4cb04078a/six-1.15.0-py2.py3-none-any.whl
           Collecting Werkzeug==1.0.1 (from -r /tmp/app/requirements.txt (line 12))
-            Downloading https://files.pythonhosted.org/packages/cc/94/5f7079a0e00bd6863ef8f1da638721e9da21e5bacee597595b318f71d62e/Werkzeug-1.0.1-py2.py3-none-any.whl (298kB)
           Collecting setuptools>=3.0 (from gunicorn==20.0.4->-r /tmp/app/requirements.txt (line 5))
-            Downloading https://files.pythonhosted.org/packages/52/b4/2b8decca516c7139f2d262b6a0c5dcd6388d0a2d2c760c6bbc830e49347e/setuptools-48.0.0-py3-none-any.whl (786kB)
-          Installing collected packages: six, orderedmultidict, furl, cfenv, click, MarkupSafe, Jinja2, itsdangerous, Werkzeug, Flask, setuptools, gunicorn, pika
-          Successfully installed Flask-1.1.2 Jinja2-2.11.2 MarkupSafe-1.1.1 Werkzeug-1.0.1 cfenv-0.5.3 click-7.1.2 furl-2.1.0 gunicorn-20.0.4 itsdangerous-1.1.0 orderedmultidict-1.0.1 pika-1.1.0 setuptools-48.0.0 six-1.15.0
-   Exit status 0
+            Downloading https://files.pythonhosted.org/packages/41/fa/60888a1d591db07bc9c17dce2bcfb9f00ac507c0a23ecb827e76feb8f816/setuptools-49.1.0-py3-none-any.whl (789kB)
+          Installing collected packages: six, orderedmultidict, furl, cfenv, click, MarkupSafe, Jinja2, Werkzeug, itsdangerous, Flask, setuptools, gunicorn, pika
+          Successfully installed Flask-1.1.2 Jinja2-2.11.2 MarkupSafe-1.1.1 Werkzeug-1.0.1 cfenv-0.5.3 click-7.1.2 furl-2.1.0 gunicorn-20.0.4 itsdangerous-1.1.0 orderedmultidict-1.0.1 pika-1.1.0 setuptools-49.1.0 six-1.15.0
    Uploading droplet, build artifacts cache...
    Uploading droplet...
    Uploading build artifacts cache...
    Uploaded build artifacts cache (1.8M)
    Uploaded droplet (58.2M)
    Uploading complete
-   Cell 65a71ce1-e630-4765-8f60-adebfa730268 stopping instance 784e7e5b-2771-48e1-a150-2c9cddfd2c46
-   Cell 65a71ce1-e630-4765-8f60-adebfa730268 destroying container for instance 784e7e5b-2771-48e1-a150-2c9cddfd2c46
-   Cell 65a71ce1-e630-4765-8f60-adebfa730268 successfully destroyed container for instance 784e7e5b-2771-48e1-a150-2c9cddfd2c46
+   Cell 33875e88-eaee-4f36-8078-33971b28ec28 stopping instance 737ff658-09d6-4645-bacd-583d08ce586c
+   Cell 33875e88-eaee-4f36-8078-33971b28ec28 destroying container for instance 737ff658-09d6-4645-bacd-583d08ce586c
+   Cell 33875e88-eaee-4f36-8078-33971b28ec28 successfully destroyed container for instance 737ff658-09d6-4645-bacd-583d08ce586c
 
-Starting app cf-python-app in org mordor / space development as shgupta@pivotal.io...
-
-Waiting for app to start...
+Waiting for app cf-python-app to start...
 
 Instances starting...
 Instances starting...
@@ -211,24 +179,26 @@ Instances starting...
 
 name:              cf-python-app
 requested state:   started
-routes:            cf-python-app-palm-wallaby-yh.cfapps.io
-last uploaded:     Fri 03 Jul 13:17:19 CDT 2020
+routes:            cf-python-app-bogus-panther-cp.cfapps.io
+last uploaded:     Tue 07 Jul 09:28:37 CDT 2020
 stack:             cflinuxfs3
 buildpacks:        python
 
-type:           web
+type:            web
 sidecars:
-instances:      1/1
-memory usage:   128M
-     state     since                  cpu    memory        disk        details
-#0   running   2020-07-03T18:17:40Z   0.0%   32K of 128M   31M of 1G
+instances:       1/1
+memory usage:    128M
+start command:   gunicorn -w 2 -t 600 app:app
+     state     since                  cpu    memory      disk      details
+#0   running   2020-07-07T14:28:57Z   0.0%   0 of 128M   0 of 1G
 
-type:           worker
+type:            worker
 sidecars:
-instances:      1/1
-memory usage:   128M
-     state     since                  cpu    memory        disk       details
-#0   running   2020-07-03T18:17:35Z   0.0%   32K of 128M   8K of 1G
+instances:       1/1
+memory usage:    128M
+start command:   python rpc_server.py
+     state     since                  cpu    memory      disk      details
+#0   running   2020-07-07T14:28:51Z   0.0%   0 of 128M   0 of 1G
 ```
 
 4. You will notice that we have a separate process `worker` as part of our app which has been specified as part of `Procfile` and is also specified in `manifest.yml`
